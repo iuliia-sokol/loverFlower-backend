@@ -9,14 +9,46 @@ const productSchema = new Schema(
       type: String,
       required: [true, "Set name for contact"],
     },
-    favorite: {
+    tags: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+    colors: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+    format: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+    contrast: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    flowers: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+    price: {
+      type: String,
+      required: true,
+      default: "0",
+    },
+    popular: {
       type: Boolean,
       default: false,
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-      required: true,
+    sale: {
+      type: Boolean,
+      default: false,
+    },
+    avatarURL: {
+      type: String,
     },
   },
   { versionKey: false, timestamps: true }
@@ -26,7 +58,15 @@ productSchema.post("save", mongooseHandleError);
 
 const addSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
-  favorite: Joi.boolean(),
+  tags: Joi.array().required(),
+  colors: Joi.array().required(),
+  format: Joi.array().required(),
+  flowers: Joi.array().required(),
+  price: Joi.string().required(),
+  avatarURL: Joi.string(),
+  contrast: Joi.boolean(),
+  popular: Joi.boolean(),
+  sale: Joi.boolean(),
 });
 
 const schemas = {
