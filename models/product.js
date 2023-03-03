@@ -49,6 +49,7 @@ const productSchema = new Schema(
     },
     avatarURL: {
       type: String,
+      default: "",
     },
   },
   { versionKey: false, timestamps: true }
@@ -63,10 +64,10 @@ const addSchema = Joi.object({
   format: Joi.array().required(),
   flowers: Joi.array().required(),
   price: Joi.string().required(),
-  avatarURL: Joi.string(),
   contrast: Joi.boolean(),
   popular: Joi.boolean(),
   sale: Joi.boolean(),
+  avatarURL: Joi.string(),
 });
 
 const schemas = {

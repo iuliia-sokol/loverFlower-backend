@@ -1,5 +1,16 @@
+const path = require("path");
+const fs = require("fs").promises;
+const Jimp = require("jimp");
+const { nanoid } = require("nanoid");
+const gravatar = require("gravatar");
+
 const { Product } = require("../models/product");
 const { HttpError, ctrlWrapper } = require("../helpers");
+
+const avatarDir = path.join(__dirname, "../", "public", "avatars");
+
+const avatarWidth = 255;
+const avatarHeight = 355;
 
 const getAll = async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
@@ -27,7 +38,9 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await Product.create({ ...req.body });
+  const { name } = req.body;
+  const avatarURL = gravatar.url(name);
+  const result = await Product.create({ ...req.body, avatarURL: avatarURL });
   res.status(201).json(result);
 };
 
@@ -53,10 +66,39 @@ const deleteById = async (req, res) => {
   });
 };
 
+const updateAvatar = async (req, res) => {
+  const { id } = req.params;
+  if (!req.file) {
+    throw HttpError(400, "Avatar must be provided");
+  }
+  const { path: tempUpload, originalname } = req.file;
+
+  const uniqueID = nanoid();
+  const filename = `${uniqueID}${originalname}`;
+  const resultUpload = path.join(avatarDir, filename);
+
+  const avatarURL = path.join("avatars", filename);
+
+  await Jimp.read(tempUpload)
+    .then((avatar) => {
+      return avatar.resize(avatarWidth, avatarHeight).write(tempUpload);
+    })
+    .catch((err) => {
+      throw err;
+    });
+
+  await fs.rename(tempUpload, resultUpload);
+  await Product.findByIdAndUpdate(id, { avatarURL });
+  res.json({
+    avatarURL,
+  });
+};
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
   deleteById: ctrlWrapper(deleteById),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
