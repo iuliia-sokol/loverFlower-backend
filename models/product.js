@@ -70,8 +70,22 @@ const addSchema = Joi.object({
   avatarURL: Joi.string(),
 });
 
+const updateSchema = Joi.object({
+  name: Joi.string().min(3).max(30),
+  tags: Joi.array(),
+  colors: Joi.array(),
+  format: Joi.array(),
+  flowers: Joi.array(),
+  price: Joi.string(),
+  contrast: Joi.boolean(),
+  popular: Joi.boolean(),
+  sale: Joi.boolean(),
+  avatarURL: Joi.string(),
+});
+
 const schemas = {
   addSchema,
+  updateSchema,
 };
 
 const Product = model("product", productSchema);

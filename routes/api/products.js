@@ -12,6 +12,13 @@ router.post("/", validateBody(schemas.addSchema), ctrl.add);
 
 router.delete("/:id", isValidId, ctrl.deleteById);
 
+router.patch(
+  "/:id",
+  isValidId,
+  validateBody(schemas.updateSchema),
+  ctrl.updateById
+);
+
 router.patch("/avatars/:id", upload.single("avatarURL"), ctrl.updateAvatar);
 
 module.exports = router;
