@@ -16,6 +16,7 @@ const getAll = async (req, res) => {
   const {
     page = 1,
     limit = 20,
+    name,
     colors,
     flowers,
     format,
@@ -30,6 +31,9 @@ const getAll = async (req, res) => {
 
   let filters = {};
 
+  if (name) {
+    filters = { ...filters, name };
+  }
   if (colors) {
     filters = { ...filters, colors };
   }
