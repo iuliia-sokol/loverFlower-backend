@@ -39,6 +39,11 @@ const productSchema = new Schema(
       required: true,
       default: "0",
     },
+    oldPrice: {
+      type: String,
+      required: false,
+      default: "",
+    },
     popular: {
       type: Boolean,
       default: false,
@@ -68,6 +73,7 @@ const addSchema = Joi.object({
   popular: Joi.boolean(),
   sale: Joi.boolean(),
   avatarURL: Joi.string(),
+  oldPrice: Joi.string(),
 });
 
 const updateSchema = Joi.object({
@@ -81,6 +87,7 @@ const updateSchema = Joi.object({
   popular: Joi.boolean(),
   sale: Joi.boolean(),
   avatarURL: Joi.string(),
+  oldPrice: Joi.string(),
 });
 
 const schemas = {
