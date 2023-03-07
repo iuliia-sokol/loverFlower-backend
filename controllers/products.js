@@ -13,9 +13,48 @@ const avatarWidth = 255;
 const avatarHeight = 355;
 
 const getAll = async (req, res) => {
-  const { page = 1, limit = 20 } = req.query;
+  const {
+    page = 1,
+    limit = 20,
+    colors,
+    flowers,
+    format,
+    contrast,
+    price,
+    popular,
+    tags,
+    sale,
+  } = req.query;
+
   const skip = (page - 1) * limit;
-  const filters = {};
+
+  let filters = {};
+
+  if (colors) {
+    filters = { ...filters, colors };
+  }
+  if (flowers) {
+    filters = { ...filters, flowers };
+  }
+  if (format) {
+    filters = { ...filters, format };
+  }
+  if (contrast) {
+    filters = { ...filters, contrast };
+  }
+  if (popular) {
+    filters = { ...filters, popular };
+  }
+  if (price) {
+    filters = { ...filters, price };
+  }
+  if (tags) {
+    filters = { ...filters, tags };
+  }
+  if (sale) {
+    filters = { ...filters, sale };
+  }
+
   const result = await Product.find(filters, "-createdAt -updatedAt", {
     skip,
     limit,
